@@ -8,20 +8,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserMapper {
-
-    // map loginDto to user
-    public User toUser(@NotNull loginDto dto){
+    // map userDto to user
+    public User toUser(@NotNull UserDto dto){
         var user = new User();
         user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
         user.setAbout(dto.getAbout());
         return user;
     }
 
-    // map user to loginDto
-    public loginDto toDto(User user){
-        var loginDto = new loginDto();
-        loginDto.setName(user.getName());
-        loginDto.setAbout(user.getAbout());
-        return loginDto;
+    // map user to userDto
+    public UserDto toDto(User user){
+        var userDto = new UserDto();
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setAbout(user.getAbout());
+        return userDto;
     }
 }

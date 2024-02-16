@@ -1,9 +1,8 @@
 package com.example.BloggingApplication.controller;
 
 import com.example.BloggingApplication.dto.UserDto;
-import com.example.BloggingApplication.dto.loginDto;
 import com.example.BloggingApplication.entity.User;
-import com.example.BloggingApplication.mapper.UserMapper;
+import com.example.BloggingApplication.mapper.loginMapper;
 import com.example.BloggingApplication.service.implementation.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
     @Autowired
-    private UserMapper userMapper;
+    private loginMapper userMapper;
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto user){
         User registeredUser = userService.register(user);
@@ -31,10 +30,9 @@ public class UserController {
 
     // only return necessary details using userDto
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user){
-
+    public ResponseEntity<?> loginUser(@Valid @RequestBody User user){
         User loggedUser = userService.login(user);
-        var dto = userMapper.toDto(loggedUser); // convert user to dto, to expose only name and about.
-        return new ResponseEntity<>(HttpStatus.OK).ok(dto); //returns entire user object.
+        var dto = userMapper.toDto(loggedUser); // convert user to dto, to expose only necessary details.
+        return new ResponseEntity<>(HttpStatus.OK).ok(dto); //return name and about.
     }
 }

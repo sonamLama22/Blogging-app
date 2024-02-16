@@ -1,9 +1,10 @@
 package com.example.BloggingApplication.service.implementation;
 
 import com.example.BloggingApplication.dto.UserDto;
-import com.example.BloggingApplication.dto.loginDto;
 import com.example.BloggingApplication.entity.Post;
 import com.example.BloggingApplication.entity.User;
+import com.example.BloggingApplication.mapper.UserMapper;
+import com.example.BloggingApplication.mapper.loginMapper;
 import com.example.BloggingApplication.repository.UserRepo;
 import com.example.BloggingApplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +16,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserRepo userRepo;
+    @Autowired
+    public UserMapper userMapper;
 
     @Override
-    public User register(UserDto user) {
-        User u = new User();
-        u.setName(user.getName());
-        u.setEmail(user.getEmail());
-        u.setPassword(user.getPassword());
-        u.setAbout(user.getAbout());
-        return userRepo.save(u);
+    public User register(UserDto dto) {
+        User registeredUser = userMapper.toUser(dto); // map dto to user
+        return userRepo.save(registeredUser);
     }
 
     @Override
