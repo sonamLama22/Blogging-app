@@ -1,10 +1,13 @@
 package com.example.BloggingApplication.controller;
 
 import com.example.BloggingApplication.dto.PostDto;
+import com.example.BloggingApplication.entity.Category;
 import com.example.BloggingApplication.entity.Comments;
 import com.example.BloggingApplication.entity.Post;
 import com.example.BloggingApplication.entity.User;
 import com.example.BloggingApplication.exception.ResourceNotFoundException;
+import com.example.BloggingApplication.service.CategoryService;
+import com.example.BloggingApplication.service.implementation.CategoryServiceImpl;
 import com.example.BloggingApplication.service.implementation.PostServiceImpl;
 import com.example.BloggingApplication.service.implementation.UserServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -25,10 +28,13 @@ public class PostController {
     PostServiceImpl postService;
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    CategoryServiceImpl categoryService;
 
-    @PostMapping("/userId={userId}/create-post")
-    public ResponseEntity<?> createPost(@PathVariable int userId, @RequestBody PostDto postDto) throws ResourceNotFoundException {
+    @PostMapping("/userId={userId}/categoryId={categoryId}/create-post")
+    public ResponseEntity<?> createPost(@PathVariable int userId, @RequestBody PostDto postDto, @PathVariable int categoryId) throws ResourceNotFoundException {
         userService.userExists(userId); //check if user exists.
+        categoryService.getCategory(categoryId); //check if category exists.
         Post post = new Post();
         BeanUtils.copyProperties(postDto, post);
         Post postCreated = postService.createPost(post);
@@ -68,5 +74,12 @@ public class PostController {
             return new ResponseEntity<>("Post has been deleted successfully.", HttpStatus.OK);
         }
         return new ResponseEntity<>("Post could not be deleted.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/categoryId={categoryId}/posts")
+    public ResponseEntity<?> ListPostsByCategory(@PathVariable int categoryId) throws ResourceNotFoundException {
+        Category category = categoryService.getCategory(categoryId);
+        List<Post> list = postService.finPostsByCategoryId(categoryId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

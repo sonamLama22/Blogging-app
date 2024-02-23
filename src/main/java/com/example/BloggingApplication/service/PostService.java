@@ -15,4 +15,5 @@ public interface PostService {
     public String deletePost(int postId) throws ResourceNotFoundException;
 //    public List<Post>  listAllPosts() ;
     public List<Post> findPostsByUserId(int userId);
+    public List<Post> finPostsByCategoryId(int categoryId);
 }

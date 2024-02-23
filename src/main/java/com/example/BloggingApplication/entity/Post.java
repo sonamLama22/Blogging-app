@@ -22,7 +22,11 @@ public class Post {
     // adds foreign key in Post table that corresponds to user_id in users table.
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore // ignore the user field from response
+    //@JsonIgnore // ignore the user field from response
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name="categoryId")
+    private Category category;
 
 }

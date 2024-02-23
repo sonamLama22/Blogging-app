@@ -1,6 +1,7 @@
 package com.example.BloggingApplication.dto;
 
 
+import com.example.BloggingApplication.entity.Category;
 import com.example.BloggingApplication.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,4 +15,5 @@ public class PostDto {
     private String title;
     private String content;
     private User user;
+    private Category category;
 }

@@ -52,6 +52,11 @@ public class PostServiceImpl implements PostService {
         return postRepo.findPostsByUser_userId(userId);
     }
 
+    @Override
+    public List<Post> finPostsByCategoryId(int categoryId) {
+        return postRepo.findPostsByCategory_categoryId(categoryId);
+    }
+
 //    @Override
 //    public List<Post> listAllPosts() {
 //        List<Post>  list =postRepo.findAll();
