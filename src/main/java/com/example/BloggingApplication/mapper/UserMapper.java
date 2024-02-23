@@ -11,6 +11,7 @@ public class UserMapper {
     // map userDto to user
     public User toUser(@NotNull UserDto dto){
         var user = new User();
+        user.setUserId(dto.getUserId());
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
@@ -21,6 +22,7 @@ public class UserMapper {
     // map user to userDto
     public UserDto toDto(User user){
         var userDto = new UserDto();
+        userDto.setUserId(user.getUserId());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());

@@ -11,6 +11,7 @@ public class loginMapper {
     // map loginDto to user
     public User toUser(@NotNull loginDto dto){
         var user = new User();
+        user.setUserId(dto.getUserId());
         user.setName(dto.getName());
         user.setAbout(dto.getAbout());
         return user;
@@ -19,6 +20,7 @@ public class loginMapper {
     // map user to loginDto
     public loginDto toDto(User user){
         var loginDto = new loginDto();
+        loginDto.setUserId(user.getUserId());
         loginDto.setName(user.getName());
         loginDto.setAbout(user.getAbout());
         return loginDto;

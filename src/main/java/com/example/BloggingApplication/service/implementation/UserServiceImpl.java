@@ -3,6 +3,7 @@ package com.example.BloggingApplication.service.implementation;
 import com.example.BloggingApplication.dto.UserDto;
 import com.example.BloggingApplication.entity.Post;
 import com.example.BloggingApplication.entity.User;
+import com.example.BloggingApplication.exception.ResourceNotFoundException;
 import com.example.BloggingApplication.mapper.UserMapper;
 import com.example.BloggingApplication.mapper.loginMapper;
 import com.example.BloggingApplication.repository.UserRepo;
@@ -10,6 +11,7 @@ import com.example.BloggingApplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
 import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,9 +22,9 @@ public class UserServiceImpl implements UserService {
     public UserMapper userMapper;
 
     @Override
-    public User register(UserDto dto) {
-        User registeredUser = userMapper.toUser(dto); // map dto to user
-        return userRepo.save(registeredUser);
+    public User register(User user) {
+//        User registeredUser = userMapper.toUser(dto); // map dto to user
+        return userRepo.save(user);
     }
 
     @Override
@@ -31,27 +33,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String createPost(Post post) {
-        return null;
+    public void userExists(int id) throws ResourceNotFoundException {
+        userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("User not found for this id ::"+id));
     }
 
     @Override
-    public Post getPost(int postId) {
-        return null;
+    public User findUser(int userId) throws ResourceNotFoundException {
+        return userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found for this id ::"+userId));
     }
 
     @Override
-    public Post updatePost(Post post) {
-        return null;
-    }
-
-    @Override
-    public boolean deletePost(int postId) {
-        return false;
-    }
-
-    @Override
-    public List<Post> listAll() {
-        return null;
+    public List<User> findUsers() {
+        return userRepo.findAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.BloggingApplication.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,16 +12,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "users")
 @Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "user_id")
+    private int userId;
     private String name;
 
     @Email(message = "Email should be valid")
@@ -31,6 +36,15 @@ public class User {
     @NotEmpty(message = "Password cannot be empty")
     @Size(min=8, message = "Password must be at least 8 characters")
     @JsonProperty("password")
+    //@JsonIgnore
     private String password;
+
+    //@NotEmpty(message = "about cannot be empty")
+    @JsonProperty("about")
     private String about;
+
+//    // One user can have multiple posts.
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) //map on the basis of "user", and ignore the table created by this relationship.
+//    private List<Post> postList = new ArrayList<>(); // new table is created for this field.
+//
 }
