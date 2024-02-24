@@ -10,7 +10,10 @@ import com.example.BloggingApplication.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +26,26 @@ public class PostServiceImpl implements PostService {
     private UserRepo userRepo;
 
     @Override
-    public Post createPost(Post post) {
-        return postRepo.save(post);
+    public Post createPost(Post post, MultipartFile file) throws Exception {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        // handle validations
+        try{
+            if(fileName.contains("..")){
+                throw new Exception("Filename contains invalid path sequence: "+ fileName);
+            }
+            post = Post.builder()
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .user(post.getUser())
+                    .category(post.getCategory())
+                    .fileName(fileName)
+                    .fileType(file.getContentType())
+                    .data(file.getBytes())
+                    .build();
+            return postRepo.save(post);
+        } catch (Exception e) {
+            throw new Exception("Could not save File: "+ fileName);
+        }
     }
 
     @Override
@@ -58,9 +79,22 @@ public class PostServiceImpl implements PostService {
     }
 
 //    @Override
-//    public List<Post> listAllPosts() {
-//        List<Post>  list =postRepo.findAll();
-//        return list;
+//    public Post saveImage(MultipartFilcd e file) throws Exception {
+//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//        // handle validations
+//        try{
+//            if(fileName.contains("..")){
+//                throw new Exception("Filename contains invalid path sequence: "+ fileName);
+//            }
+//            Post post = Post.builder()
+//                    .fileName(fileName)
+//                    .fileType(file.getContentType())
+//                    .data(file.getBytes())
+//                    .build();
+//            return postRepo.save(post);
+//        } catch (Exception e) {
+//            throw new Exception("Could not save File: "+ fileName);
+//        }
 //    }
 
 }

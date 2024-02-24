@@ -4,6 +4,7 @@ package com.example.BloggingApplication.dto;
 import com.example.BloggingApplication.entity.Category;
 import com.example.BloggingApplication.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,4 +17,6 @@ public class PostDto {
     private String content;
     private User user;
     private Category category;
+    private String fileName;
+    private String fileType;
 }

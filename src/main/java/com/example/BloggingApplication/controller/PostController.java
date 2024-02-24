@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +33,15 @@ public class PostController {
     @Autowired
     CategoryServiceImpl categoryService;
 
-    @PostMapping("/userId={userId}/categoryId={categoryId}/create-post")
-    public ResponseEntity<?> createPost(@PathVariable int userId, @RequestBody PostDto postDto, @PathVariable int categoryId) throws ResourceNotFoundException {
+    @PostMapping(value="/userId={userId}/categoryId={categoryId}/create-post", headers = ("content-type=multipart/*"))
+    public ResponseEntity<?> createPost(@RequestPart("file") MultipartFile file, @PathVariable int userId,
+                                        @RequestPart("data") PostDto postDto, @PathVariable int categoryId)
+                                        throws Exception {
         userService.userExists(userId); //check if user exists.
         categoryService.getCategory(categoryId); //check if category exists.
         Post post = new Post();
         BeanUtils.copyProperties(postDto, post);
-        Post postCreated = postService.createPost(post);
+        Post postCreated = postService.createPost(post, file);
         return new ResponseEntity<>(postCreated, HttpStatus.OK);
     }
 
@@ -82,4 +86,15 @@ public class PostController {
         List<Post> list = postService.finPostsByCategoryId(categoryId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+//    @PostMapping("/upload/{postId}")
+//    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file, @PathVariable int postId) throws Exception {
+//        //convert file to byte array and save it to DB.
+//        PostDto p = postService.getPost(postId);
+//        if( p != null){
+//            postService.saveImage(file);
+//            return new ResponseEntity<>("Image uploaded successfully.", HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>("Image could not be uploaded.", HttpStatus.OK);
+//    }
 }

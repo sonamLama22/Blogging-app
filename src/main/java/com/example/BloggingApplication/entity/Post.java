@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "post")
 public class Post {
     @Id
@@ -28,5 +30,11 @@ public class Post {
     @ManyToOne
     @JoinColumn(name="categoryId")
     private Category category;
+
+    private String fileName;
+    private String fileType;
+
+    @Lob
+    private byte[] data;
 
 }
